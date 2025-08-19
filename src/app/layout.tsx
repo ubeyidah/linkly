@@ -42,7 +42,7 @@ export default function RootLayout({
               <Navbar />
               <Wrapper as={"main"} className="py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12">
-                  <div className="hidden lg:block lg:col-span3">sidebar</div>
+                  <div className="hidden lg:block lg:col-span-3">sidebar</div>
                   <div className="lg:col-span9">{children}</div>
                 </div>
               </Wrapper>

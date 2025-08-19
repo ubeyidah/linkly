@@ -2,14 +2,10 @@ import React, { Suspense } from "react";
 import Wrapper from "./wrapper";
 import Image from "next/image";
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs/server";
 import DesktopNavbar from "./desktop-navbar";
 import MobileNavbar from "./mobile-navbar";
 
-const Navbar = async () => {
-  const user = await currentUser();
-  console.log(user);
-
+const Navbar = () => {
   return (
     <header className="border-b py-3 bg-background/40 backdrop-blur-3xl sticky top-0">
       <Wrapper className="flex justify-between items-center gap-4">
@@ -21,7 +17,9 @@ const Navbar = async () => {
           <Suspense fallback="loading...">
             <DesktopNavbar />
           </Suspense>
-          <MobileNavbar />
+          <Suspense fallback="loading...">
+            <MobileNavbar />
+          </Suspense>
         </div>
       </Wrapper>
     </header>
