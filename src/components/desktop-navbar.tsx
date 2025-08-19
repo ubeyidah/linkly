@@ -17,7 +17,7 @@ const DesktopNavbar = async () => {
         <span className="hidden lg:inline">Home</span>
       </Link>
       {user ? (
-        <>
+        <div className="flex gap-4 items-center">
           <Link
             href={"/notifications"}
             className={cn(buttonVariants({ variant: "ghost" }))}
@@ -35,7 +35,7 @@ const DesktopNavbar = async () => {
             <span className="hidden lg:inline">Profile</span>
           </Link>
           <UserButton />
-        </>
+        </div>
       ) : (
         <SignInButton mode="modal">
           <Button>Sign In</Button>
