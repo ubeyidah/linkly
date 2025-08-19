@@ -4,8 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import DesktopNavbar from "./desktop-navbar";
 import MobileNavbar from "./mobile-navbar";
+import { syncUser } from "@/actions/user.actions";
+import { currentUser } from "@clerk/nextjs/server";
 
-const Navbar = () => {
+const Navbar = async () => {
+  const user = await currentUser();
+  if (user) await syncUser(); // TODO: use webhooks for production
   return (
     <header className="border-b py-3 bg-background/40 backdrop-blur-3xl sticky top-0">
       <Wrapper className="flex justify-between items-center gap-4">
