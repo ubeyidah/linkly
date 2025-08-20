@@ -5,6 +5,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/nav-bar";
 import Wrapper from "@/components/wrapper";
+import Sidebar from "@/components/side-bar";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,8 +43,14 @@ export default function RootLayout({
             <div className="min-h-screen">
               <Navbar />
               <Wrapper as={"main"} className="py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-12">
-                  <div className="hidden lg:block lg:col-span-3">sidebar</div>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  <div className="hidden lg:block lg:col-span-3">
+                    <div className="sticky">
+                      <Suspense fallback={"lading..."}>
+                        <Sidebar />
+                      </Suspense>
+                    </div>
+                  </div>
                   <div className="lg:col-span9">{children}</div>
                 </div>
               </Wrapper>
