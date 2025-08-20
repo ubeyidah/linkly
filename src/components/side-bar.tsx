@@ -53,7 +53,7 @@ const Sidebar = async () => {
           </div>
 
           <div className="w-full space-y-2 text-sm">
-            <div className="flex items-center text-muted-foreground">
+            <div className="flex items-center text-muted-foreground capitalize">
               <MapPinIcon className="w-4 h-4 mr-2" />
               {user.location || "No location"}
             </div>
@@ -62,7 +62,7 @@ const Sidebar = async () => {
               {user.website ? (
                 <a
                   href={`${user.website}`}
-                  className="hover:underline truncate"
+                  className="hover:underline hover:text-white truncate"
                   target="_blank"
                 >
                   {user.website}
