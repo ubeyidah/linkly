@@ -3,7 +3,6 @@
 import prisma from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { Pirata_One } from "next/font/google";
 
 export const syncUser = async () => {
   try {
@@ -53,7 +52,7 @@ export const getUserByClerkId = async (clerkId: string) => {
 
 export const getDbUserId = async () => {
   const { userId: clerkId } = await auth();
-  if (!clerkId) throw new Error("Unauthorized");
+  if (!clerkId) return null;
   const user = await getUserByClerkId(clerkId);
   if (!user) throw new Error("User not found");
   return user.id;
@@ -101,6 +100,12 @@ export const getSuggestedUsers = async () => {
 export const toggleFollow = async (userToFollowId: string) => {
   try {
     const userId = await getDbUserId();
+    if (!userId)
+      return {
+        success: false,
+        data: null,
+        message: "unauthorized",
+      };
     if (userId == userToFollowId)
       return {
         success: false,

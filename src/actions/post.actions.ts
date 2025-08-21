@@ -21,6 +21,60 @@ export const createPost = async (content: string, image: string) => {
     revalidatePath("/");
     return { success: true, data: null, message: "post created successfully" };
   } catch (error) {
+    console.log("error while creating post", error);
+
+    return { success: false, data: null, message: "something went wrong" };
+  }
+};
+
+export const getPosts = async () => {
+  try {
+    const posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            image: true,
+          },
+        },
+        comments: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                username: true,
+                name: true,
+                image: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        like: {
+          select: {
+            userId: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+            like: true,
+          },
+        },
+      },
+    });
+
+    return posts;
+  } catch (error) {
+    console.log("error while getting posts", error);
+
     return { success: false, data: null, message: "something went wrong" };
   }
 };
