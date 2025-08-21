@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { Pirata_One } from "next/font/google";
 
 export const syncUser = async () => {
@@ -142,6 +143,7 @@ export const toggleFollow = async (userToFollowId: string) => {
         }),
       ]);
     }
+    revalidatePath("/");
     return { success: true, data: null, message: "opration successfull" };
   } catch (error) {
     console.log("Error follow users", error);

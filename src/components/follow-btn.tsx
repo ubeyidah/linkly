@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Loader2Icon } from "lucide-react";
+import { toggleFollow } from "@/actions/user.actions";
 
 const FollowButton = ({ userToFollowId }: { userToFollowId: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const handleFollow = async () => {
     try {
       setIsLoading(true);
+      await toggleFollow(userToFollowId);
     } catch (error) {
       console.log("error while follow", error);
     } finally {
@@ -16,7 +18,12 @@ const FollowButton = ({ userToFollowId }: { userToFollowId: string }) => {
     }
   };
   return (
-    <Button variant={"secondary"} onClick={handleFollow} disabled={isLoading}>
+    <Button
+      variant={"secondary"}
+      onClick={handleFollow}
+      disabled={isLoading}
+      className="min-w-20"
+    >
       {isLoading ? <Loader2Icon className="size-4 animate-spin" /> : "Follow"}
     </Button>
   );
