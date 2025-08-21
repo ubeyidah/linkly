@@ -1,5 +1,6 @@
 import CreatePost from "@/components/create-post";
-import React from "react";
+import SuggestedUsers from "@/components/SuggestedUsers";
+import React, { Suspense } from "react";
 
 const page = async () => {
   return (
@@ -7,7 +8,11 @@ const page = async () => {
       <div className="lg:col-span-6">
         <CreatePost />
       </div>
-      <div className="hidden lg:block lg:col-span-4 sticky top-20">suggest</div>
+      <div className="hidden lg:block lg:col-span-4 sticky top-20">
+        <Suspense fallback={"Loading users...."}>
+          <SuggestedUsers />
+        </Suspense>
+      </div>
     </div>
   );
 };
