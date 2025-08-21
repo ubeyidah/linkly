@@ -51,7 +51,7 @@ export default function RootLayout({
                       </Suspense>
                     </div>
                   </div>
-                  <div className="lg:col-span9">{children}</div>
+                  <div className="lg:col-span-9">{children}</div>
                 </div>
               </Wrapper>
             </div>
