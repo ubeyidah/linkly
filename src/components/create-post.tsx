@@ -34,7 +34,7 @@ const CreatePost = () => {
   };
   if (user) {
     return (
-      <Card className="mb-6 bg-card/40">
+      <Card>
         <CardContent className="pt-6">
           <div className="space-y-4">
             <div className="flex space-x-4">

@@ -15,7 +15,7 @@ const Sidebar = async () => {
   if (!user) return null;
 
   return (
-    <Card>
+    <Card className="card">
       <CardContent className="pt-6 sticky">
         <div className="flex flex-col items-center text-center">
           <Avatar className="w-20 h-20 border-2 ">
