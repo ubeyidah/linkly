@@ -3,42 +3,44 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Avatar } from "./ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { Button } from "./ui/button";
 import Link from "next/link";
+import FollowButton from "./follow-btn";
 
 const SuggestedUsers = async () => {
   const suggestedUsers = await getSuggestedUsers();
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Find New Friends</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        {suggestedUsers.map((user) => (
-          <div key={user.id} className="flex items-center justify-between">
-            <div className="flex gap-3 items-center">
-              <Avatar className="size-10">
-                <AvatarImage src={user.image?.toString()} />
-              </Avatar>
-              <div>
-                <h4 className="-mb-1">{user.name}</h4>
-                <Link
-                  href={`/profile/${user.username}`}
-                  className="text-sm text-muted-foreground hover:underline hover:text-white"
-                >
-                  @{user.username}
-                </Link>
-                <p className="text-xs text-muted-foreground">
-                  Followers {user._count.followers}
-                </p>
+  if (suggestedUsers) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Find New Friends</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          {suggestedUsers.map((user) => (
+            <div key={user.id} className="flex items-center justify-between">
+              <div className="flex gap-3 items-center">
+                <Avatar className="size-10">
+                  <AvatarImage src={user.image?.toString()} />
+                </Avatar>
+                <div>
+                  <h4 className="-mb-1">{user.name}</h4>
+                  <Link
+                    href={`/profile/${user.username}`}
+                    className="text-sm text-muted-foreground hover:underline hover:text-white"
+                  >
+                    @{user.username}
+                  </Link>
+                  <p className="text-xs text-muted-foreground">
+                    Followers {user._count.followers}
+                  </p>
+                </div>
               </div>
+              <FollowButton userToFollowId={user.id} />
             </div>
-            <Button variant={"outline"}>Follow</Button>
-          </div>
-        ))}
-      </CardContent>
-    </Card>
-  );
+          ))}
+        </CardContent>
+      </Card>
+    );
+  }
 };
 
 export default SuggestedUsers;

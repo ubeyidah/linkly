@@ -21,6 +21,6 @@ export const createPost = async (content: string, image: string) => {
     revalidatePath("/");
     return { success: true, data: null, message: "post created successfully" };
   } catch (error) {
-    return { success: true, data: null, message: "something went wrong" };
+    return { success: false, data: null, message: "something went wrong" };
   }
 };

@@ -34,7 +34,9 @@ const DesktopNavbar = async () => {
             <UserIcon className="size-4" />
             <span className="hidden lg:inline">Profile</span>
           </Link>
-          <UserButton />
+          <div>
+            <UserButton />
+          </div>
         </div>
       ) : (
         <SignInButton mode="modal">

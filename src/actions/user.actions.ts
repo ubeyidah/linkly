@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { Pirata_One } from "next/font/google";
 
 export const syncUser = async () => {
   try {
@@ -93,6 +94,57 @@ export const getSuggestedUsers = async () => {
     return suggestedUsers;
   } catch (error) {
     console.log("Error fetching random users", error);
-    return [];
+  }
+};
+
+export const toggleFollow = async (userToFollowId: string) => {
+  try {
+    const userId = await getDbUserId();
+    if (userId == userToFollowId)
+      return {
+        success: false,
+        data: null,
+        message: "you can not follow yourself.",
+      };
+
+    const isExisitingFollow = await prisma.follows.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId: userId,
+          followingId: userToFollowId,
+        },
+      },
+    });
+
+    if (isExisitingFollow) {
+      await prisma.follows.delete({
+        where: {
+          followerId_followingId: {
+            followerId: userId,
+            followingId: userToFollowId,
+          },
+        },
+      });
+    } else {
+      await prisma.$transaction([
+        prisma.follows.create({
+          data: {
+            followerId: userId,
+            followingId: userToFollowId,
+          },
+        }),
+        prisma.notification.create({
+          data: {
+            type: "FOLLOW",
+            userId: userToFollowId,
+            creatorId: userId,
+          },
+        }),
+      ]);
+    }
+    return { success: true, data: null, message: "opration successfull" };
+  } catch (error) {
+    console.log("Error follow users", error);
+    return { success: false, data: null, message: "something went wrong" };
   }
 };
