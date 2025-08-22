@@ -22,7 +22,7 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
               </Avatar>
             </Link>
           </div>
-          <div>
+          <div className="flex-1">
             <div className="flex items-center justify-between">
               <div className="flex flex-col truncate">
                 <h4 className="font-semibold truncate">{post.author.name}</h4>
@@ -50,7 +50,7 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
                     <img
                       src={post.image}
                       alt="Post content"
-                      className="w-full h-auto object-cover"
+                      className="w-full object-cover"
                     />
                   </div>
                 )}
