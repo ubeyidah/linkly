@@ -1,30 +1,16 @@
-"use client";
-import { getPosts, toggleLike } from "@/actions/post.actions";
-import React, { useState } from "react";
+import { getPosts } from "@/actions/post.actions";
+import React from "react";
 import { Card, CardContent, CardHeader } from "./ui/card";
-import { SignInButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
-import {
-  HeartIcon,
-  LogInIcon,
-  MessageCircleIcon,
-  SendIcon,
-} from "lucide-react";
-import { Textarea } from "./ui/textarea";
+import { MessageCircleIcon } from "lucide-react";
 import LikeButton from "./like-btn";
+import { timeAgo } from "@/lib/time-ago";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
 const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
-  const { user } = useUser();
-  const [newComment, setNewComment] = useState("");
-  const [isCommenting, setIsCommenting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const [showComments, setShowComments] = useState(false);
-
   return (
     <Card className="overflow-hidden">
       <CardHeader>
@@ -44,7 +30,7 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
                     @{post.author.username}
                   </Link>
                   <span>•</span>
-                  <span>{new Date(post.createdAt).toLocaleString()} ago</span>
+                  <span>{timeAgo(post.createdAt)}</span>
                 </div>
               </div>
             </div>
@@ -81,11 +67,10 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
               variant="ghost"
               size="sm"
               className="text-muted-foreground gap-2 hover:text-blue-500"
-              onClick={() => setShowComments((prev) => !prev)}
             >
               <MessageCircleIcon
                 className={`size-5 ${
-                  showComments ? "fill-blue-500 text-blue-500" : ""
+                  false ? "fill-blue-500 text-blue-500" : ""
                 }`}
               />
               <span>{post.comments.length}</span>
