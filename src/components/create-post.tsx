@@ -17,7 +17,7 @@ const CreatePost = () => {
   const [showImageUpload, setShowImageUpload] = useState(false);
 
   const handleSubmit = async () => {
-    if (!content.trim() && !imageUrl) return;
+    if (!content.trim()) return;
     setIsPosting(true);
     try {
       const result = await createPost(content, imageUrl);
@@ -83,13 +83,13 @@ const CreatePost = () => {
                 </Button>
               </div>
               <Button
-                className="flex items-center"
+                className="flex items-center rounded-full"
                 onClick={handleSubmit}
                 disabled={(!content.trim() && !imageUrl) || isPosting}
               >
                 {isPosting ? (
                   <>
-                    <Loader2Icon className="size-4 mr-2 animate-spin" />
+                    <Loader2Icon className="size-4 animate-spin" />
                     Posting...
                   </>
                 ) : (

@@ -28,7 +28,7 @@ export const syncUser = async () => {
         name: `${user.firstName || ""} ${user.lastName || ""}`,
       },
     });
-
+    revalidatePath("/");
     return dbUser;
   } catch (error) {
     console.log("Error in user Sync ", error);
@@ -54,7 +54,7 @@ export const getDbUserId = async () => {
   const { userId: clerkId } = await auth();
   if (!clerkId) return null;
   const user = await getUserByClerkId(clerkId);
-  if (!user) throw new Error("User not found");
+  if (!user) return null;
   return user.id;
 };
 

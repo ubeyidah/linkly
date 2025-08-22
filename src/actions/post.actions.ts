@@ -8,7 +8,7 @@ export const createPost = async (content: string, image: string) => {
   try {
     const userId = await getDbUserId();
     if (!userId) return { success: false, data: null, message: "unauthorized" };
-    if (!content.trim() || !image)
+    if (!content.trim())
       return { success: false, data: null, message: "invalid post content" };
 
     await prisma.post.create({
@@ -75,6 +75,6 @@ export const getPosts = async () => {
   } catch (error) {
     console.log("error while getting posts", error);
 
-    return { success: false, data: null, message: "something went wrong" };
+    return [];
   }
 };
