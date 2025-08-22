@@ -78,3 +78,54 @@ export const getPosts = async () => {
     return [];
   }
 };
+
+export const toggleLike = async (
+  postToLikeId: string,
+  postAuthorId: string
+) => {
+  try {
+    const userId = await getDbUserId();
+    if (!userId) return { success: false, data: null, message: "unauthorized" };
+    const isAlreadyLiked = await prisma.like.findUnique({
+      where: {
+        userId_postId: {
+          postId: postToLikeId,
+          userId,
+        },
+      },
+    });
+
+    if (isAlreadyLiked) {
+      await prisma.like.delete({
+        where: {
+          userId_postId: {
+            postId: postToLikeId,
+            userId: userId,
+          },
+        },
+      });
+    } else {
+      await prisma.$transaction([
+        prisma.like.create({
+          data: {
+            postId: postToLikeId,
+            userId,
+          },
+        }),
+        prisma.notification.create({
+          data: {
+            type: "LIKE",
+            userId: postAuthorId,
+            creatorId: userId,
+            postId: postToLikeId,
+          },
+        }),
+      ]);
+    }
+
+    return { success: true, data: null, message: "opration successfull" };
+  } catch (error) {
+    console.log("error while likeing post form server", error);
+    return { success: false, data: null, message: "someting went wrong" };
+  }
+};

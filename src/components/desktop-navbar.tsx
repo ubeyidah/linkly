@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "./ui/button";
 import { BellIcon, HomeIcon, UserIcon } from "lucide-react";
 import { currentUser } from "@clerk/nextjs/server";
-import { SignInButton, UserButton } from "@clerk/nextjs";
+import { SignInButton } from "@clerk/nextjs";
+import { UserButtonClient } from "./user-button-client";
 
 const DesktopNavbar = async () => {
   const user = await currentUser();
@@ -17,7 +18,7 @@ const DesktopNavbar = async () => {
         <span className="hidden lg:inline">Home</span>
       </Link>
       {user ? (
-        <div className="flex gap-4 items-center">
+        <>
           <Link
             href={"/notifications"}
             className={cn(buttonVariants({ variant: "ghost" }))}
@@ -34,10 +35,8 @@ const DesktopNavbar = async () => {
             <UserIcon className="size-4" />
             <span className="hidden lg:inline">Profile</span>
           </Link>
-          <div>
-            <UserButton />
-          </div>
-        </div>
+          <UserButtonClient />
+        </>
       ) : (
         <SignInButton mode="modal">
           <Button>Sign In</Button>

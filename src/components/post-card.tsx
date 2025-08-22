@@ -1,5 +1,5 @@
 "use client";
-import { getPosts } from "@/actions/post.actions";
+import { getPosts, toggleLike } from "@/actions/post.actions";
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { SignInButton, useUser } from "@clerk/nextjs";
@@ -27,6 +27,21 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
   );
   const [optimisticLikes, setOptmisticLikes] = useState(post._count.like);
   const [showComments, setShowComments] = useState(false);
+
+  const handleLike = async () => {
+    try {
+      setIsLiking(true);
+      const res = await toggleLike(post.id, post.author.id);
+      if (!res.success) {
+        console.log("unable to like the post");
+      }
+    } catch (error) {
+      console.log("error while like the post ", error);
+    } finally {
+      setIsLiking(false);
+    }
+  };
+
   return (
     <Card className="overflow-hidden">
       <CardHeader>
@@ -75,6 +90,7 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
               <Button
                 variant="ghost"
                 size="sm"
+                onClick={handleLike}
                 className={`text-muted-foreground gap-2 ${
                   hasLiked
                     ? "text-red-500 hover:text-red-600"
