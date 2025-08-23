@@ -13,9 +13,18 @@ import { Textarea } from "./ui/textarea";
 import { getDbUser } from "@/actions/user.actions";
 import { Separator } from "./ui/separator";
 import { SignInButton } from "@clerk/nextjs";
+import { getComments } from "@/actions/post.actions";
+import { timeAgo } from "@/lib/time-ago";
 
-const Comments = async ({ commentCount }: { commentCount: number }) => {
+const Comments = async ({
+  commentCount,
+  postId,
+}: {
+  commentCount: number;
+  postId: string;
+}) => {
   const user = await getDbUser();
+  const comments = await getComments(postId);
   return (
     <div>
       <Sheet>
@@ -63,6 +72,32 @@ const Comments = async ({ commentCount }: { commentCount: number }) => {
                 </div>
               )}
               <Separator className="my-1" />
+              <div>
+                {comments?.map((comment) => (
+                  <div key={comment.id} className="flex space-x-3">
+                    <Avatar className="size-8 flex-shrink-0">
+                      <AvatarImage
+                        src={comment.author.image ?? "/avatar.png"}
+                      />
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="font-medium text-sm">
+                          {comment.author.name}
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          @{comment.author.username}
+                        </span>
+                        <span className="text-sm text-muted-foreground">·</span>
+                        <span className="text-sm text-muted-foreground">
+                          {timeAgo(new Date(comment.createdAt))} ago
+                        </span>
+                      </div>
+                      <p className="text-sm break-words">{comment.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </SheetContent>
           </SheetHeader>
         </SheetContent>

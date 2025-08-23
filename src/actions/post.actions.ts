@@ -129,3 +129,24 @@ export const toggleLike = async (
     return { success: false, data: null, message: "someting went wrong" };
   }
 };
+
+export const getComments = async (postId: string) => {
+  try {
+    const comment = await prisma.comment.findMany({
+      where: { id: postId },
+      include: {
+        author: {
+          select: {
+            name: true,
+            username: true,
+            image: true,
+          },
+        },
+      },
+    });
+    //TODO notify the post author
+    return comment;
+  } catch (error) {
+    console.log("error while getting comments", error);
+  }
+};

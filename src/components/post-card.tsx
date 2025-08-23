@@ -66,7 +66,7 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
                     likeCount={post._count.like}
                   />
 
-                  <Comments commentCount={post._count.comments} />
+                  <Comments commentCount={post._count.comments} postId={post.id} />
                 </div>
               </div>
             </div>
