@@ -4,9 +4,10 @@ import { Card, CardContent } from "./ui/card";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { EllipsisVertical, MessageCircleIcon } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import LikeButton from "./like-btn";
 import { timeAgo } from "@/lib/time-ago";
+import Comments from "./comment";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
@@ -15,7 +16,7 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
     <Card className="overflow-hidden">
       <CardContent>
         <div className="flex items-start gap-3">
-          <div>
+          <div className="pt-1">
             <Link href={`/profile/${post.author.username}`}>
               <Avatar className="size-8 sm:w-10 sm:h-10">
                 <AvatarImage src={post.author.image ?? "/avatar.png"} />
@@ -65,18 +66,7 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
                     likeCount={post._count.like}
                   />
 
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-muted-foreground gap-2 hover:text-blue-500"
-                  >
-                    <MessageCircleIcon
-                      className={`size-5 ${
-                        false ? "fill-blue-500 text-blue-500" : ""
-                      }`}
-                    />
-                    <span>{post.comments.length}</span>
-                  </Button>
+                  <Comments commentCount={post._count.comments} />
                 </div>
               </div>
             </div>

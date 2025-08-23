@@ -58,6 +58,14 @@ export const getDbUserId = async () => {
   return user.id;
 };
 
+export const getDbUser = async () => {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) return null;
+  const user = await getUserByClerkId(clerkId);
+  if (!user) return null;
+  return user;
+};
+
 export const getSuggestedUsers = async () => {
   try {
     const userId = await getDbUserId();

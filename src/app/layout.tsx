@@ -32,7 +32,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
         >
           <ThemeProvider
             attribute="class"
@@ -42,17 +42,18 @@ export default function RootLayout({
           >
             <div className="min-h-screen">
               <Navbar />
-              <Wrapper as={"main"} className="py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                  <div className="hidden lg:block lg:col-span-3">
-                    <div className="sticky">
-                      <Suspense fallback={"lading..."}>
-                        <Sidebar />
-                      </Suspense>
-                    </div>
+              <Wrapper
+                as={"main"}
+                className="py-8 grid grid-cols-1 lg:grid-cols-12 gap-6"
+              >
+                <div className="hidden lg:block lg:col-span-3">
+                  <div className="sticky top-[80px]">
+                    <Suspense fallback={"lading..."}>
+                      <Sidebar />
+                    </Suspense>
                   </div>
-                  <div className="lg:col-span-9">{children}</div>
                 </div>
+                <div className="lg:col-span-9">{children}</div>
               </Wrapper>
             </div>
           </ThemeProvider>
