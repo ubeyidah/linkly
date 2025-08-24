@@ -15,13 +15,16 @@ import { Separator } from "./ui/separator";
 import { SignInButton } from "@clerk/nextjs";
 import { getComments } from "@/actions/post.actions";
 import { timeAgo } from "@/lib/time-ago";
+import CommentForm from "./comment-form";
 
 const Comments = async ({
   commentCount,
   postId,
+  postAuthorId,
 }: {
   commentCount: number;
   postId: string;
+  postAuthorId: string;
 }) => {
   const user = await getDbUser();
   const comments = await getComments(postId);
@@ -44,56 +47,42 @@ const Comments = async ({
           <SheetHeader>
             <SheetTitle></SheetTitle>
             <SheetContent className="px-3 pt-12">
-              {user ? (
-                <div className="flex space-x-3">
-                  <Avatar className="size-8 flex-shrink-0">
-                    <AvatarImage src={user?.image || ""} />
-                  </Avatar>
-                  <div className="flex-1">
-                    <Textarea
-                      placeholder="Write a comment..."
-                      className="min-h-[80px] resize-none"
-                    />
-                    <div className="flex justify-end mt-2">
-                      <Button size="sm" className="flex items-center gap-2">
-                        <SendIcon className="size-4" />
-                        Comment
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <SignInButton>
-                    <Button className="w-full" variant={"outline"}>
-                      Sign in to comment
-                    </Button>
-                  </SignInButton>
-                </div>
-              )}
+              <CommentForm
+                auth={!!user}
+                imageUrl={user?.image ?? ""}
+                postId={postId}
+                authorId={postAuthorId}
+              />
               <Separator className="my-1" />
-              <div>
+              <div className="flex flex-col gap-5">
                 {comments?.map((comment) => (
                   <div key={comment.id} className="flex space-x-3">
-                    <Avatar className="size-8 flex-shrink-0">
+                    <Avatar className="size-8 flex-shrink-0 mt-2">
                       <AvatarImage
                         src={comment.author.image ?? "/avatar.png"}
                       />
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <div className="flex flex-wrap items-start flex-col gap-x-2">
                         <span className="font-medium text-sm">
                           {comment.author.name}
                         </span>
-                        <span className="text-sm text-muted-foreground">
-                          @{comment.author.username}
-                        </span>
-                        <span className="text-sm text-muted-foreground">·</span>
-                        <span className="text-sm text-muted-foreground">
-                          {timeAgo(new Date(comment.createdAt))} ago
-                        </span>
+                        <p>
+                          {" "}
+                          <span className="text-sm text-muted-foreground">
+                            @{comment.author.username}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            {" · "}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            {timeAgo(new Date(comment.createdAt))}
+                          </span>
+                        </p>
                       </div>
-                      <p className="text-sm break-words">{comment.content}</p>
+                      <p className="text-sm break-words mt-1">
+                        {comment.content}
+                      </p>
                     </div>
                   </div>
                 ))}

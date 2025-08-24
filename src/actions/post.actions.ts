@@ -133,7 +133,7 @@ export const toggleLike = async (
 export const getComments = async (postId: string) => {
   try {
     const comment = await prisma.comment.findMany({
-      where: { id: postId },
+      where: { postId },
       include: {
         author: {
           select: {
@@ -144,9 +144,49 @@ export const getComments = async (postId: string) => {
         },
       },
     });
-    //TODO notify the post author
     return comment;
   } catch (error) {
     console.log("error while getting comments", error);
+  }
+};
+
+export const sendComment = async (
+  content: string,
+  postId: string,
+  authorId: string
+) => {
+  if (!content.trim()) return;
+  try {
+    const userId = await getDbUserId();
+    if (!userId) return { success: false, data: null, message: "unauthorized" };
+    await prisma.$transaction(async (tx) => {
+      const comment = await tx.comment.create({
+        data: {
+          content,
+          authorId: userId,
+          postId,
+        },
+      });
+      if (authorId !== userId) {
+        await tx.notification.create({
+          data: {
+            type: "COMMENT",
+            userId: authorId,
+            creatorId: userId,
+            commentId: comment.id,
+            postId,
+          },
+        });
+      }
+    });
+    revalidatePath("/");
+    return {
+      success: true,
+      data: null,
+      message: "comment created successfully",
+    };
+  } catch (error) {
+    console.log("error while commeting the post", error);
+    return { success: false, data: null, message: "someting went wrong" };
   }
 };
