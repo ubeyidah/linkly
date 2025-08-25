@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { HeartIcon } from "lucide-react";
 import { useState } from "react";
 import { toggleLike } from "@/actions/post.actions";
-import { Like } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 
 const LikeButton = ({

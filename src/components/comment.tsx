@@ -1,18 +1,15 @@
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "./ui/button";
-import { MessageCircleIcon, SendIcon } from "lucide-react";
+import { MessageCircleIcon } from "lucide-react";
 import { Avatar, AvatarImage } from "./ui/avatar";
-import { Textarea } from "./ui/textarea";
 import { getDbUser } from "@/actions/user.actions";
 import { Separator } from "./ui/separator";
-import { SignInButton } from "@clerk/nextjs";
 import { getComments } from "@/actions/post.actions";
 import { timeAgo } from "@/lib/time-ago";
 import CommentForm from "./comment-form";
